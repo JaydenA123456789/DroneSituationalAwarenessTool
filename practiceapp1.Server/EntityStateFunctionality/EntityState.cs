@@ -37,6 +37,22 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
             AirEntityList = new List<AirEntity>();
             MaritimeEntityList = new List<MaritimeEntity>();
 
+            //Add dummy drone so that it will render air and maritime data with an active drone
+            new DroneEntity
+            {
+                Id = "Drone1",
+                Position = new Position(
+                -27.47,
+                153.0,
+                -100000.0
+                ),
+                Attitude = new Attitude(0.0, 0.0, 0.0),
+                Created_UTC = DateTime.Now,
+                LastUpdate_UTC = DateTime.Now,
+                LastReported_UTC = DateTime.Now,
+                TracePositions = new List<Position>()
+            };
+
             //create task to update time (hz)
             CreateStaleRunner(0.5);
         }
@@ -107,7 +123,7 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
                     return;
                 }
             }
-            if (MaritimeEntityList.Count > 100) { _MaritimeEntityLock.ExitWriteLock(); return; };
+            if (MaritimeEntityList.Count > 100) { _MaritimeEntityLock.ExitWriteLock(); return; }; //Reduce render count due to hardware limitiations (need to test with higher counts)
             MaritimeEntityList.Add(newEntity);
             SendEntityUpdateToClient(newEntity);
             _MaritimeEntityLock.ExitWriteLock();

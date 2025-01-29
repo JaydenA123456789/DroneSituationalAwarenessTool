@@ -51,40 +51,40 @@ function App() {
                         case "SharedLibraries.EntityFunctionality.Debug_GenericEntity":
                             console.log('New Debug Data');
                             sphereColour = Cesium.Color.GREEN;
-                            AddSphere()
+                            AddSphere(0.2)
                             break;
                         case "SharedLibraries.EntityFunctionality.AirEntity":
                             console.log('New Air Data');
                             sphereColour = Cesium.Color.RED;
-                            AddSphere()
+                            AddSphere(0.2)
                             break;
                         case "SharedLibraries.EntityFunctionality.MaritimeEntity":
                             console.log('New Maritime Data');
                             sphereColour = Cesium.Color.YELLOW;
-                            AddSphere()
+                            AddSphere(0.2)
                             break;
                         case "SharedLibraries.EntityFunctionality.DroneEntity":
                             console.log('New Drone Data');
                             sphereColour = Cesium.Color.ORANGE;
-                            //AddSphere()
+                            AddSphere(0.1)
                             AddModel()
                             break
                         case "Stale":
                             console.log('Data Staled');
                             sphereColour = Cesium.Color.GRAY;
-                            AddSphere()
+                            AddSphere(0.25)
                             break;
                         default:
                             sphereColour = Cesium.Color.GRAY;
                             break;
                     }
 
-                    function AddSphere() {
+                    function AddSphere(alpha) {
                         if (cesiumRef.current) {
                             cesiumRef.current.drawSphere(jsonEntity.Id,
                                 jsonEntity.Position.Longitude, jsonEntity.Position.Latitude, jsonEntity.Position.Altitude,
                                 200,
-                                sphereColour, 0.2,
+                                sphereColour, alpha,
                                 jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw
                             );
                         }
