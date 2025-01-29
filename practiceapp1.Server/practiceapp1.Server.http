@@ -1,0 +1,6 @@
+@DroneSituationalAwarenessTool.Server_HostAddress = http://localhost:5043
+
+GET {{DroneSituationalAwarenessTool.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

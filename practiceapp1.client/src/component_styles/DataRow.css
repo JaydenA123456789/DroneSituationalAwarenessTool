@@ -1,0 +1,12 @@
+.row {
+    display: flex;
+    width: 100% !important;
+    justify-content: space-between !important;
+    
+}
+
+.column {
+    text-align: right;
+    overflow: hidden;
+    font-size: 1em;
+}

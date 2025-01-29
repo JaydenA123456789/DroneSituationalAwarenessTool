@@ -1,0 +1,6 @@
+@MaritimeDataMicroService_HostAddress = http://localhost:5284
+
+GET {{MaritimeDataMicroService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

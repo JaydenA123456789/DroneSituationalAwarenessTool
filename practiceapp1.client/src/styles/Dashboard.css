@@ -1,0 +1,99 @@
+.ui-container {
+    position: fixed;
+    border: 3px solid #FF7000;
+    box-sizing: border-box;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    color: white;
+    pointer-events: none;
+}
+
+.control-panel {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -0%);
+    border: 3px solid #FF7000;
+    width: 30vw;
+    height: 15vh;
+    background-color: rgb(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: space-evenly;
+    pointer-events: auto !important;
+    border-radius: 15px;
+}
+
+.control-panel div {
+    /*border: 2px dotted #4cff00;*/
+    justify-content: center;
+    
+}
+
+#controller-toggle {
+
+}
+
+/* Generic */
+.info-section {
+    width: 25%;
+}
+
+
+.sub-container {
+    box-sizing: border-box;
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; 
+}
+
+
+/* load-and-stats section*/
+#title {
+    
+    font-size: 1.3em !important;
+}
+
+#stats-section {
+    width: 100%;
+    display: block;
+}
+
+/*play - pause section*/
+.play-pause-section {
+    display: flex;
+    width: 50% !important;
+    align-items: center;
+}
+
+#circle-button-holder {
+    width: 100%;
+    
+
+}
+
+.circle-button {
+    border-radius: 50%;
+    font-size: 100%;
+    overflow: hidden;
+}
+
+#large-button {
+    padding:8%
+}
+
+#small-button {
+    padding: 4%
+}
+
+
+
+/* options section*/
+#toggle-section {
+    width: 100%;
+    vertical-align: middle;
+}

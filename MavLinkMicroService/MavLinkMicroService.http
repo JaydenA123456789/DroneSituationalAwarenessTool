@@ -1,0 +1,6 @@
+@MavLinkMicroService_HostAddress = http://localhost:5062
+
+GET {{MavLinkMicroService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

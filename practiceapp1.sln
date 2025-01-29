@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneSituationalAwarenessTool.Server", "practiceapp1.Server\DroneSituationalAwarenessTool.Server.csproj", "{FDC53D6D-F7E9-4370-B96A-CB7A02A5056F}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "DroneSituationalAwarenessTool.client", "practiceapp1.client\DroneSituationalAwarenessTool.client.esproj", "{13C00506-AA77-46A5-99F7-C519AE6F2B76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MavLinkMicroService", "MavLinkMicroService\MavLinkMicroService.csproj", "{0AF8C8C2-D89F-41F5-89C3-AD1D6F0D298E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirDataMicroService", "AirDataMicroService\AirDataMicroService.csproj", "{FEADA2DF-07EB-4326-8693-7CE6022D95E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaritimeDataMicroService", "MaritimeDataMicroService\MaritimeDataMicroService.csproj", "{EB85D7BB-97E0-4E9D-B23E-55446491584F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataMicroservices", "DataMicroservices", "{103BAB26-41C9-4FF9-9432-37DD949563F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibraries", "SharedLibraries\SharedLibraries.csproj", "{2117564D-5BC5-4430-B2BC-899D8F8CDCA0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDC53D6D-F7E9-4370-B96A-CB7A02A5056F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDC53D6D-F7E9-4370-B96A-CB7A02A5056F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDC53D6D-F7E9-4370-B96A-CB7A02A5056F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDC53D6D-F7E9-4370-B96A-CB7A02A5056F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13C00506-AA77-46A5-99F7-C519AE6F2B76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13C00506-AA77-46A5-99F7-C519AE6F2B76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13C00506-AA77-46A5-99F7-C519AE6F2B76}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{13C00506-AA77-46A5-99F7-C519AE6F2B76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13C00506-AA77-46A5-99F7-C519AE6F2B76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13C00506-AA77-46A5-99F7-C519AE6F2B76}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0AF8C8C2-D89F-41F5-89C3-AD1D6F0D298E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AF8C8C2-D89F-41F5-89C3-AD1D6F0D298E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AF8C8C2-D89F-41F5-89C3-AD1D6F0D298E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AF8C8C2-D89F-41F5-89C3-AD1D6F0D298E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEADA2DF-07EB-4326-8693-7CE6022D95E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEADA2DF-07EB-4326-8693-7CE6022D95E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEADA2DF-07EB-4326-8693-7CE6022D95E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEADA2DF-07EB-4326-8693-7CE6022D95E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB85D7BB-97E0-4E9D-B23E-55446491584F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB85D7BB-97E0-4E9D-B23E-55446491584F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB85D7BB-97E0-4E9D-B23E-55446491584F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB85D7BB-97E0-4E9D-B23E-55446491584F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2117564D-5BC5-4430-B2BC-899D8F8CDCA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2117564D-5BC5-4430-B2BC-899D8F8CDCA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2117564D-5BC5-4430-B2BC-899D8F8CDCA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2117564D-5BC5-4430-B2BC-899D8F8CDCA0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0AF8C8C2-D89F-41F5-89C3-AD1D6F0D298E} = {103BAB26-41C9-4FF9-9432-37DD949563F4}
+		{FEADA2DF-07EB-4326-8693-7CE6022D95E6} = {103BAB26-41C9-4FF9-9432-37DD949563F4}
+		{EB85D7BB-97E0-4E9D-B23E-55446491584F} = {103BAB26-41C9-4FF9-9432-37DD949563F4}
+	EndGlobalSection
+EndGlobal

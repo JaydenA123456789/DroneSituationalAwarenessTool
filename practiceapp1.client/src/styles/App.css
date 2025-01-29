@@ -1,0 +1,28 @@
+﻿
+#root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+th, td {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.main-screen {
+    position: fixed;
+    left: 0;
+    top: 5%;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+
