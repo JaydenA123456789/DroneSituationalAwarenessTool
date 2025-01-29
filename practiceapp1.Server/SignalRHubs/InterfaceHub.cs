@@ -2,8 +2,6 @@
 using Newtonsoft.Json;
 using DroneSituationalAwarenessTool.Server.EntityStateFunctionality;
 using SharedLibraries.EntityFunctionality;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace DroneSituationalAwarenessTool.Server.SignalRHubs
 {

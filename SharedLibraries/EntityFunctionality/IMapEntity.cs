@@ -16,7 +16,5 @@ namespace SharedLibraries.EntityFunctionality
         public List<Position> TracePositions { get; set; }
 
         public void UpdateEntity(IMapEntity entity);
-        //public string SerializeSelf();
-
     }
 }

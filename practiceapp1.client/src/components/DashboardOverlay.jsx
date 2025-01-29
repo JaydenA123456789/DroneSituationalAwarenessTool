@@ -43,8 +43,4 @@ const DashboardOverlay = ({ stats, onUpdateStats }) => {
     }
 };
 
-
-
-
-
 export default DashboardOverlay;

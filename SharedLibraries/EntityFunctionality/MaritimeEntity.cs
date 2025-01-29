@@ -24,7 +24,6 @@ namespace SharedLibraries.EntityFunctionality
                     pos.Latitude == newEntity.Position.Latitude &&
                     pos.Longitude == newEntity.Position.Longitude &&
                     pos.Altitude == newEntity.Position.Altitude))
-
                 {
                     TracePositions.Add(newEntity.Position);
                 }

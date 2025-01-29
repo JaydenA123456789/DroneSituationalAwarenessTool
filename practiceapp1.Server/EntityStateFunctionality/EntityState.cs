@@ -27,7 +27,7 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
             _clientHubContext = clientHubContext;
 
             CreationTime = DateTime.Now;
-            //set arrays
+
             Debug_GenericEntityList = new List<Debug_GenericEntity>();
             DroneEntityList = new List<DroneEntity>();
             AirEntityList = new List<AirEntity>();

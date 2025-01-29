@@ -16,7 +16,7 @@ namespace AirDataMicroService.AirSignalRClient
             System.Threading.Thread.Sleep(1000);
             StartConnection();
         }
-        private int number = 0;
+        private int airPacketNumber = 0;
         public async void StartConnection()
         {
             var connection = new HubConnectionBuilder()
@@ -28,11 +28,7 @@ namespace AirDataMicroService.AirSignalRClient
 
             while (true)
             {
-                //get API call
-                //send messsage
-                //delay
                 await Task.Delay(2500);
-
 
                 var handler = new HttpClientHandler
                 {
@@ -57,15 +53,12 @@ namespace AirDataMicroService.AirSignalRClient
                         foreach (var aircraft in jsonObj.features)
                         {                        
 
-                            Console.WriteLine($"Air data number: {number++}");
-                            if (number == 2) {
-                                int test = 0;
-                            }
+                            Console.WriteLine($"Air data number: {airPacketNumber++}");
 
-                            string pattern = @"(\d{1,3}(,\d{3})?) ft<";
-                            string input = aircraft.properties.popupContent;
+                            string regexPattern = @"(\d{1,3}(,\d{3})?) ft<";
+                            string regexInput = aircraft.properties.popupContent;
                             double altitude = 0;//default value in case of error
-                            Match match = Regex.Match(input, pattern);
+                            Match match = Regex.Match(regexInput, regexPattern);
                             if (match.Success)
                             {
                                 altitude = Convert.ToDouble((match.Groups[1].Value).Replace(",", ""));

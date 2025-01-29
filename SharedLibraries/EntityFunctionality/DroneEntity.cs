@@ -19,7 +19,7 @@ namespace SharedLibraries.EntityFunctionality
             LastUpdate_UTC = DateTime.Now;
             LastReported_UTC = newEntity.LastReported_UTC;
 
-            //check that the newest point is above the threshold (vehicle has to move a certain distance before the trace point is recorded)
+            //Don't check that the newest point is above the threshold
             //skip for drones as we want full precision
 
             //check that data isnt default 0,0,0 and it isnt a duplicate

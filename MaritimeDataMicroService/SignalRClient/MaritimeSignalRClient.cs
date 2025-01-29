@@ -3,10 +3,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharedLibraries.EntityFunctionality;
 using SharedLibraries.HelperObjects;
-using System;
 using System.Net.WebSockets;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace MaritimeDataMicroService.MaritimeSignalRClient
 {
@@ -24,7 +22,7 @@ namespace MaritimeDataMicroService.MaritimeSignalRClient
                 .Build();
 
             await connection.StartAsync();
-            Console.WriteLine("Connected to SignalR hub.");
+            Console.WriteLine("Connected to Maritime SignalR hub.");
             try
             {
                 using (var clientWebSocket = new ClientWebSocket())
@@ -35,7 +33,7 @@ namespace MaritimeDataMicroService.MaritimeSignalRClient
 
                     Console.WriteLine("Connected to WebSocket!");
 
-                    // Subscription message
+                    // Subscription message, API should be moved to a .env file
                     var message = @"
                         {
                             ""APIKey"": ""e9f5590c585a73715c98cd1f1561bc7456408081"",
@@ -47,19 +45,13 @@ namespace MaritimeDataMicroService.MaritimeSignalRClient
                                 ]
                             ]
                         }";
-                    /*   
-                        [49.384358, -124.848974],
-                        [24.396308, -124.848974],
-                        [49.384358, -66.93457],
-                        [24.396308, -66.93457]
-                     */
 
                     var messageBytes = Encoding.UTF8.GetBytes(message);
                     await clientWebSocket.SendAsync(new ArraySegment<byte>(messageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
                     Console.WriteLine("Message sent to server.");
 
                     var random = new Random();
-                    int packetNumber = 0;
+                    int maritimePacketNumber = 0;
                     while (true)
                     {
                         // Listening for incoming messages
@@ -76,12 +68,8 @@ namespace MaritimeDataMicroService.MaritimeSignalRClient
                             else
                             {
                                 var receivedMessage = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                                Console.WriteLine($"Maritime Data Packet no.: {packetNumber}");
-                                //if ((packetNumber++ < 500) || (random.Next(3) == 0)) // 1 in 3 chance after 500 updates
-                                if (true)
-                                {
-                                    SendData(connection, receivedMessage);
-                                }
+                                Console.WriteLine($"Maritime Data Packet no.: {maritimePacketNumber}");
+                                SendData(connection, receivedMessage);
                             }
                         }
                     }
@@ -94,9 +82,7 @@ namespace MaritimeDataMicroService.MaritimeSignalRClient
 
         }
 
-        private int number =0;
         private async void SendData(HubConnection connection, string jsonString) {
-            Console.WriteLine($"maratime number{number++}");
             dynamic jsonObj = null;
             try
             {
@@ -108,6 +94,7 @@ namespace MaritimeDataMicroService.MaritimeSignalRClient
                 return;
             }
             string JSONMessageType = jsonObj.MessageType;
+            //Get heading from whatever the messsage type is
             double TrueHeading = 0.0;
             try
             {
@@ -153,14 +140,12 @@ namespace MaritimeDataMicroService.MaritimeSignalRClient
                     };
 
                     await connection.InvokeAsync("SendMessage", "MaritimeData", JsonConvert.SerializeObject(newEntity));
-                    
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Failed to send message: {ex.Message}");
                 }
             }
-            
         }
     }
 } 

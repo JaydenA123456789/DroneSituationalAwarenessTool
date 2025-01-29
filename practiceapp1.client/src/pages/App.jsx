@@ -111,7 +111,6 @@ function App() {
                 connection.on('UpdateTrackToCesium', (user, message) => {
                     const jsonEntity = JSON.parse(message);
                     var traceArray = jsonEntity.TracePositions;
-                    //cesium
                     if (cesiumRef.current) {
                         cesiumRef.current.AddUpdateTrack(jsonEntity.Id+"Trace", traceArray)
                     }
