@@ -51,36 +51,52 @@ function App() {
                         case "SharedLibraries.EntityFunctionality.Debug_GenericEntity":
                             console.log('New Debug Data');
                             sphereColour = Cesium.Color.GREEN;
+                            AddSphere()
                             break;
                         case "SharedLibraries.EntityFunctionality.AirEntity":
                             console.log('New Air Data');
                             sphereColour = Cesium.Color.RED;
+                            AddSphere()
                             break;
                         case "SharedLibraries.EntityFunctionality.MaritimeEntity":
                             console.log('New Maritime Data');
                             sphereColour = Cesium.Color.YELLOW;
+                            AddSphere()
                             break;
                         case "SharedLibraries.EntityFunctionality.DroneEntity":
                             console.log('New Drone Data');
                             sphereColour = Cesium.Color.ORANGE;
+                            //AddSphere()
+                            AddModel()
                             break
                         case "Stale":
                             console.log('Data Staled');
                             sphereColour = Cesium.Color.GRAY;
+                            AddSphere()
                             break;
                         default:
                             sphereColour = Cesium.Color.GRAY;
                             break;
                     }
 
-                    if (cesiumRef.current) {
-                        //cesiumRef.current.DeleteEntity(jsonEntity.Id);
-                        cesiumRef.current.drawSphere(jsonEntity.Id,
-                            jsonEntity.Position.Longitude, jsonEntity.Position.Latitude, jsonEntity.Position.Altitude,
-                            200,
-                            sphereColour, 0.2,
-                            jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw
-                        );
+                    function AddSphere() {
+                        if (cesiumRef.current) {
+                            cesiumRef.current.drawSphere(jsonEntity.Id,
+                                jsonEntity.Position.Longitude, jsonEntity.Position.Latitude, jsonEntity.Position.Altitude,
+                                200,
+                                sphereColour, 0.2,
+                                jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw
+                            );
+                        }
+                    }
+                    function AddModel() {
+                        if (cesiumRef.current) {
+                            //drawModel = (_id, _lng, _lat, _altitude, _roll, _pitch, _yaw,)
+                            cesiumRef.current.drawModel(jsonEntity.Id,
+                                jsonEntity.Position.Longitude, jsonEntity.Position.Latitude, jsonEntity.Position.Altitude,
+                                jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw-90
+                            );
+                        }
                     }
                 });
 

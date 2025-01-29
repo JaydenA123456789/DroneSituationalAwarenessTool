@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import '../component_styles/CustomCesium.css';
+//import '../assets/fixedwing1.gltf';
 import { useEffect, useImperativeHandle, forwardRef } from "react";
 import * as Cesium from "cesium";
 
@@ -23,32 +24,54 @@ function getRandomCoordinates() {
 const Cesium3DWindow = forwardRef((props, ref) => {
     const { onUpdateStats: updateStats } = props;
 
-    const drawBox = (_id, lng, lat, alt, xSize, ySize, zSize, colour, colourAlpha) => {
+    const drawModel = (_id, _lng, _lat, _altitude, _roll, _pitch, _yaw,) => {
         try {
             //check if vehicle exists
             var entity = null;
             entity = viewerInstances[0].entities.getById(_id);
 
+
+            const hpr = new Cesium.HeadingPitchRoll(
+                Cesium.Math.toRadians(_yaw),
+                Cesium.Math.toRadians(_pitch),
+                Cesium.Math.toRadians(_roll)
+            );
+
             if (entity == null) {
                 const newEntity = viewerInstances[0].entities.add({
                     id: _id,
-                    name: "Box with black outline",
-                    customPosition: Cesium.Cartesian3.fromDegrees(lng, lat, alt),
+                    customPosition: Cesium.Cartesian3.fromDegrees(_lng, _lat, _altitude),
                     position: new Cesium.CallbackProperty(function () {
                         return newEntity.customPosition;
                     }, false),
-                    box: {
-                        dimensions: new Cesium.Cartesian3(xSize, ySize, zSize),
-                        material: colour.withAlpha(colourAlpha),
-                        outline: true,
-                        outlineColor: Cesium.Color.BLACK,
+                    customOrientation: Cesium.Transforms.headingPitchRollQuaternion(
+                        Cesium.Cartesian3.fromDegrees(_lng, _lat, _altitude), hpr),
+                    orientation: new Cesium.CallbackProperty(function () {
+                        return newEntity.customOrientation;
+                    }, false),
+                    model: {
+                        uri: 'public/uav.glb',
+                        minimumPixelSize: 528,
+                        maximumScale: 0.08,
+                        scale: 0.08,
+                        silhouetteColor: Cesium.Color.BLUE,
+                        silhouetteSize: parseFloat(1),
                     },
                 });
-                newEntity.customPosition = Cesium.Cartesian3.fromDegrees(lng, lat, alt);
-
             } else {
-                console.log("entity exists");
-                entity.position = Cesium.Cartesian3.fromDegrees(lng, lat, alt);
+                var dynamicEntityPosition = new Cesium.CallbackProperty(function () {
+                    return Cesium.Cartesian3.fromDegrees(
+                        _lng,
+                        _lat,
+                        _altitude
+                    );
+                }, false);
+                entity.position = dynamicEntityPosition;
+
+                const position = Cesium.Cartesian3.fromDegrees(_lng, _lat, _altitude);
+                const hpr = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(_yaw), Cesium.Math.toRadians(_pitch), Cesium.Math.toRadians(_roll));
+                const orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
+                entity.orientation = orientation;
             }
         } catch (error) {
             console.log('JS error: ', error);
@@ -79,8 +102,6 @@ const Cesium3DWindow = forwardRef((props, ref) => {
                 });
                 newEntity.customPosition = Cesium.Cartesian3.fromDegrees(lng, lat, alt);
             } else {
-                //console.log("entity exists");
-                //entity.position = Cesium.Cartesian3.fromDegrees(lng, lat, alt);
                 var dynamicEntityPosition = new Cesium.CallbackProperty(function () {
                     return Cesium.Cartesian3.fromDegrees(
                         lng,
@@ -177,7 +198,7 @@ const Cesium3DWindow = forwardRef((props, ref) => {
     }
 
     useImperativeHandle(ref, () => ({
-        drawBox, drawSphere, AddUpdateTrack, GetEntityStats, DeleteEntity, DeleteTrack,
+        drawModel, drawSphere, AddUpdateTrack, GetEntityStats, DeleteEntity, DeleteTrack,
     }));
 
     useEffect(() => {
@@ -283,10 +304,19 @@ const Cesium3DWindow = forwardRef((props, ref) => {
 
         const clickHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
         const onClick = function (movement) {
-            const hit = viewer.scene.pick(movement.position);
-            if (Cesium.defined(hit) && Cesium.defined(hit.id)) {
-                const entityStats = GetEntityStats(hit.id);
-                updateStats(entityStats[0], entityStats[1], entityStats[2], entityStats[3]);
+            try {
+                const hit = viewer.scene.pick(movement.position);
+                if (Cesium.defined(hit) && Cesium.defined(hit.id)) {
+                    const entityStats = GetEntityStats(hit.id);
+
+                    if (Array.isArray(entityStats) && entityStats.length >= 4) {
+                        updateStats(entityStats[0], entityStats[1], entityStats[2], entityStats[3]);
+                    } else {
+                        console.log("GetEntityStats did not return a valid array with at least 4 elements.");
+                    }
+                }
+            } catch (ex) {
+                console.log("Exception: ", ex);
             }
         };
         clickHandler.setInputAction(onClick, Cesium.ScreenSpaceEventType.LEFT_CLICK);
