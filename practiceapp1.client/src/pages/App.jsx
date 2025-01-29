@@ -47,35 +47,43 @@ function App() {
                 connection.on('UpdateAddToCesium', (user, message) => {                 
                     const jsonEntity = JSON.parse(message);
                     var sphereColour;
+                    var EntityType;
                     switch (user) {
                         case "SharedLibraries.EntityFunctionality.Debug_GenericEntity":
                             console.log('New Debug Data');
                             sphereColour = Cesium.Color.GREEN;
-                            AddSphere(0.2)
+                            EntityType = "Debug";
+                            AddSphere(0.2);
                             break;
                         case "SharedLibraries.EntityFunctionality.AirEntity":
                             console.log('New Air Data');
                             sphereColour = Cesium.Color.RED;
-                            AddSphere(0.2)
+                            EntityType = "Aircraft";
+                            AddSphere(0.2);
                             break;
                         case "SharedLibraries.EntityFunctionality.MaritimeEntity":
                             console.log('New Maritime Data');
                             sphereColour = Cesium.Color.YELLOW;
-                            AddSphere(0.2)
+                            EntityType = "Ship";
+                            AddSphere(0.2);
                             break;
                         case "SharedLibraries.EntityFunctionality.DroneEntity":
                             console.log('New Drone Data');
                             sphereColour = Cesium.Color.ORANGE;
-                            AddSphere(0.1)
-                            AddModel()
+                            EntityType = "Drone (MAVLink)";
+                            //AddSphere(0.1)
+                            AddModel();
                             break
                         case "Stale":
                             console.log('Data Staled');
+                            EntityType = "Stale Vehicle";
                             sphereColour = Cesium.Color.GRAY;
-                            AddSphere(0.25)
+                            AddSphere(0.25);
                             break;
                         default:
-                            sphereColour = Cesium.Color.GRAY;
+                            sphereColour = Cesium.Color.BLACK;
+                            EntityType = "Unknown";
+                            AddSphere(0.25);
                             break;
                     }
 
@@ -85,7 +93,8 @@ function App() {
                                 jsonEntity.Position.Longitude, jsonEntity.Position.Latitude, jsonEntity.Position.Altitude,
                                 200,
                                 sphereColour, alpha,
-                                jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw
+                                jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw,
+                                EntityType, jsonEntity.LastUpdate_UTC
                             );
                         }
                     }

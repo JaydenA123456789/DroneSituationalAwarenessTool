@@ -24,7 +24,7 @@ function getRandomCoordinates() {
 const Cesium3DWindow = forwardRef((props, ref) => {
     const { onUpdateStats: updateStats } = props;
 
-    const drawModel = (_id, _lng, _lat, _altitude, _roll, _pitch, _yaw,) => {
+    const drawModel = (_id, _Longitude, _Latitude, _Altitude, _Roll, _Pitch, _Yaw,) => {
         try {
             //check if vehicle exists
             var entity = null;
@@ -32,20 +32,20 @@ const Cesium3DWindow = forwardRef((props, ref) => {
 
 
             const hpr = new Cesium.HeadingPitchRoll(
-                Cesium.Math.toRadians(_yaw),
-                Cesium.Math.toRadians(_pitch),
-                Cesium.Math.toRadians(_roll)
+                Cesium.Math.toRadians(_Yaw),
+                Cesium.Math.toRadians(_Pitch),
+                Cesium.Math.toRadians(_Roll)
             );
 
             if (entity == null) {
                 const newEntity = viewerInstances[0].entities.add({
                     id: _id,
-                    customPosition: Cesium.Cartesian3.fromDegrees(_lng, _lat, _altitude),
+                    customPosition: Cesium.Cartesian3.fromDegrees(_Longitude, _Latitude, _Altitude),
                     position: new Cesium.CallbackProperty(function () {
                         return newEntity.customPosition;
                     }, false),
                     customOrientation: Cesium.Transforms.headingPitchRollQuaternion(
-                        Cesium.Cartesian3.fromDegrees(_lng, _lat, _altitude), hpr),
+                        Cesium.Cartesian3.fromDegrees(_Longitude, _Latitude, _Altitude), hpr),
                     orientation: new Cesium.CallbackProperty(function () {
                         return newEntity.customOrientation;
                     }, false),
@@ -61,24 +61,24 @@ const Cesium3DWindow = forwardRef((props, ref) => {
             } else {
                 var dynamicEntityPosition = new Cesium.CallbackProperty(function () {
                     return Cesium.Cartesian3.fromDegrees(
-                        _lng,
-                        _lat,
-                        _altitude
+                        _Longitude,
+                        _Latitude,
+                        _Altitude
                     );
                 }, false);
                 entity.position = dynamicEntityPosition;
 
-                const position = Cesium.Cartesian3.fromDegrees(_lng, _lat, _altitude);
-                const hpr = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(_yaw), Cesium.Math.toRadians(_pitch), Cesium.Math.toRadians(_roll));
+                const position = Cesium.Cartesian3.fromDegrees(_Longitude, _Latitude, _Altitude);
+                const hpr = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(_Yaw), Cesium.Math.toRadians(_Pitch), Cesium.Math.toRadians(_Roll));
                 const orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
                 entity.orientation = orientation;
             }
         } catch (error) {
-            console.log('JS error: ', error);
+            console.log('Sphere creation error: ', error);
         }
     }
 
-    const drawSphere = (_id, lng, lat, alt, _radius, colour, colourAlpha, Roll, Pich, Yaw) => {
+    const drawSphere = (_id, _Longitude, _Latitude, _Altitude, _Radius, _Colour, _ColourAlpha, _Roll, _Pitch, _Yaw, _EntityType, _LastReport) => {
         try {
             //check if vehicle exists
             var entity = null;
@@ -88,30 +88,30 @@ const Cesium3DWindow = forwardRef((props, ref) => {
                 const newEntity = viewerInstances[0].entities.add({
                     id: _id,
                     name: "Sphere with black outline",
-                    customStats: [lat.toFixed(5).toString(), lng.toFixed(5).toString(), alt.toFixed(5).toString(), Yaw.toFixed(5).toString()],
-                    customPosition: Cesium.Cartesian3.fromDegrees(lng, lat, alt),
+                    customStats: [_EntityType, _Altitude.toFixed(5).toString(), _Yaw.toFixed(5).toString(), _LastReport],
+                    customPosition: Cesium.Cartesian3.fromDegrees(_Longitude, _Latitude, _Altitude),
                     position: new Cesium.CallbackProperty(function () {
                         return newEntity.customPosition;
                     }, false),
                     ellipsoid: {
-                        radii: new Cesium.Cartesian3(_radius, _radius, _radius),
-                        material: colour.withAlpha(colourAlpha),
+                        radii: new Cesium.Cartesian3(_Radius, _Radius, _Radius),
+                        material: _Colour.withAlpha(_ColourAlpha),
                         outline: true,
                         outlineColor: Cesium.Color.BLACK.withAlpha(0.1),
                     },
                 });
-                newEntity.customPosition = Cesium.Cartesian3.fromDegrees(lng, lat, alt);
+                newEntity.customPosition = Cesium.Cartesian3.fromDegrees(_Longitude, _Latitude, _Altitude);
             } else {
                 var dynamicEntityPosition = new Cesium.CallbackProperty(function () {
                     return Cesium.Cartesian3.fromDegrees(
-                        lng,
-                        lat,
-                        alt
+                        _Longitude,
+                        _Latitude,
+                        _Altitude
                     );
                 }, false);
                 entity.position = dynamicEntityPosition;
-                entity.customStats = [lat.toFixed(5).toString(), lng.toFixed(5).toString(), alt.toFixed(5).toString(), Yaw.toFixed(5).toString()];
-                entity.ellipsoid.material = colour.withAlpha(colourAlpha);
+                entity.customStats = [_EntityType, _Altitude.toFixed(2).toString(), _Yaw.toFixed(2).toString(), _LastReport];
+                entity.ellipsoid.material = _Colour.withAlpha(_ColourAlpha);
             }
         } catch (error) {
             console.log('JS error: ', error);
@@ -146,9 +146,6 @@ const Cesium3DWindow = forwardRef((props, ref) => {
                 });
 
                 newEntity.customPositions = positions;
-
-                //viewerInstances[0].entities.add(newEntity);
-
 
             } else {
                 console.log("entity exists");
@@ -186,17 +183,6 @@ const Cesium3DWindow = forwardRef((props, ref) => {
         viewer.entities.remove(entity);
     }
 
-    //unused as of now, remove?
-    const GetCameraPosition = () => {
-        const cartographicPosition = viewerInstances[0].camera.positionCartographic;
-        const cameraPosition = {
-            Latitude: Cesium.Math.toDegrees(cartographicPosition.latitude),
-            Longitude: Cesium.Math.toDegrees(cartographicPosition.longitude),
-            Height: cartographicPosition.height,
-        };
-        return cameraPosition;
-    }
-
     useImperativeHandle(ref, () => ({
         drawModel, drawSphere, AddUpdateTrack, GetEntityStats, DeleteEntity, DeleteTrack,
     }));
@@ -223,7 +209,7 @@ const Cesium3DWindow = forwardRef((props, ref) => {
             return viewerInstances[containerId]; // Return the existing viewer
         }
 
-
+        //should be in .env file
         Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0M2RhNmNiMS02YmZhLTQ2NmUtYjJjMi01YWIyYzEzOWM1YzIiLCJpZCI6MTk5NjI5LCJpYXQiOjE3Mzc3MDMyNzh9.dyxQs1SeNFogZ78wz0cxAY22NTeQZVWxPuk6xq9EeYk";
 
         var viewer = new Cesium.Viewer(containerId, {
@@ -336,6 +322,9 @@ const Cesium3DWindow = forwardRef((props, ref) => {
         const hoverHandler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
         hoverHandler.setInputAction(function (movement) {
             let foundPosition = false;
+            let longitudeString = 0;
+            let latitudeString = 0;
+            let heightString = 0;
 
             const scene = viewer.scene;
             if (scene.mode !== Cesium.SceneMode.MORPHING) {
@@ -344,18 +333,18 @@ const Cesium3DWindow = forwardRef((props, ref) => {
 
                     if (Cesium.defined(cartesian)) {
                         const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
-                        const longitudeString = Cesium.Math.toDegrees(
+                        longitudeString = Cesium.Math.toDegrees(
                             cartographic.longitude,
                         ).toFixed(2);
-                        const latitudeString = Cesium.Math.toDegrees(
+                        latitudeString = Cesium.Math.toDegrees(
                             cartographic.latitude,
                         ).toFixed(2);
-                        const heightString = cartographic.height.toFixed(2);
+                        heightString = cartographic.height.toFixed(2);
 
                         labelEntity.position = cartesian;
                         labelEntity.label.show = true;
                         labelEntity.label.text =
-                            `Lon: ${`   ${longitudeString}`.slice(-7)}\u00B0` +
+                            `\nLon: ${`   ${longitudeString}`.slice(-7)}\u00B0` +
                             `\nLat: ${`   ${latitudeString}`.slice(-7)}\u00B0` +
                             `\nAlt: ${`   ${heightString}`.slice(-7)}m`;
 
@@ -377,41 +366,15 @@ const Cesium3DWindow = forwardRef((props, ref) => {
                 const pickedObject = scene.pick(movement.endPosition);
                 if (pickedObject != undefined) {
                     //console.log(pickedObject._id);
-                    labelEntity.label.text = "Vehicle ID: "+pickedObject.id._id;
+                    labelEntity.label.text = "Vehicle ID: " + pickedObject.id._id +
+                        `\nLon: ${`   ${longitudeString}`.slice(-7)}\u00B0` +
+                        `\nLat: ${`   ${latitudeString}`.slice(-7)}\u00B0`;
                     labelEntity.label.show = true;
                 } else {
                     labelEntity.label.show = false;
                 }
             }
         }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-
-        /*
-        viewer.entities.add({
-            id: "MouseLable",
-            //isShowing: false,
-            label: {
-                text: "test",
-                show: true,
-                showBackground: true,
-                font: "14px monospace",
-                horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
-                verticalOrigin: Cesium.VerticalOrigin.TOP,
-                pixelOffset: new Cesium.Cartesian2(15, 0),
-            },
-        });
-        const hoverHandler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
-        hoverHandler.setInputAction(function (movement) {
-            var mouseEntity = viewer.entities.getById('mou');
-            const pickedObject = scene.pick(movement.endPosition);
-            if (pickedObject != undefined) {
-                console.log(pickedObject._id);
-                mouseEntity.label.show = true;
-            } else {
-                mouseEntity.label.show = false;
-            }
-        
-        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);*/
-
         viewerInstances[0] = viewer;
     };
 });

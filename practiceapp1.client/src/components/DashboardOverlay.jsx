@@ -12,10 +12,10 @@ const DashboardOverlay = ({ stats, onUpdateStats }) => {
                     
                     <div className="sub-container" id="stats-section">
                         <div id="title">Statistics</div>
-                        <DataRow dataTitle="Latitude" dataValue={stats.statsValue1} />
-                        <DataRow dataTitle="Longitude" dataValue={stats.statsValue2} />
-                        <DataRow dataTitle="Altitude" dataValue={stats.statsValue3} />
-                        <DataRow dataTitle="Heading" dataValue={stats.statsValue4}/>
+                        <DataRow dataTitle="Type" dataValue={stats.statsValue1} />
+                        <DataRow dataTitle="Altitude" dataValue={stats.statsValue2} />
+                        <DataRow dataTitle="Heading" dataValue={stats.statsValue3} />
+                        <DataRow dataTitle="Last Report (UTC)" dataValue={stats.statsValue4} id="UTC-time" />
                     </div>
                 </div>
                 <div className="play-pause-section">

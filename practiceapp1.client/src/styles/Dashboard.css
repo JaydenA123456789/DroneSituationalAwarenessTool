@@ -27,24 +27,19 @@
 }
 
 .control-panel div {
-    /*border: 2px dotted #4cff00;*/
     justify-content: center;
-    
 }
 
-#controller-toggle {
 
-}
 
 /* Generic */
 .info-section {
-    width: 25%;
+    width: 50%;
 }
 
 
 .sub-container {
     box-sizing: border-box;
-    margin-top: 5%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -54,7 +49,6 @@
 
 /* load-and-stats section*/
 #title {
-    
     font-size: 1.3em !important;
 }
 
@@ -72,8 +66,6 @@
 
 #circle-button-holder {
     width: 100%;
-    
-
 }
 
 .circle-button {
@@ -90,10 +82,12 @@
     padding: 4%
 }
 
-
-
 /* options section*/
 #toggle-section {
     width: 100%;
     vertical-align: middle;
+}
+
+.ui-container .control-panel #stats-section #UTC-time {
+    font-size: 1px !important;
 }
