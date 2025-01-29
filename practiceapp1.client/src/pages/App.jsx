@@ -31,7 +31,7 @@ function App() {
     useEffect(() => {
         // 1. Build the connection
         const connection = new HubConnectionBuilder()
-            .withUrl('https://localhost:7017/ClientHub') // Replace with your actual hub URL
+            .withUrl('https://localhost:7017/ClientHub')
             .configureLogging(LogLevel.Information)
             .withAutomaticReconnect()
             .build();
@@ -87,12 +87,12 @@ function App() {
                             break;
                     }
 
-                    function AddSphere(alpha) {
+                    function AddSphere(colourAlpha) {
                         if (cesiumRef.current) {
                             cesiumRef.current.drawSphere(jsonEntity.Id,
                                 jsonEntity.Position.Longitude, jsonEntity.Position.Latitude, jsonEntity.Position.Altitude,
                                 200,
-                                sphereColour, alpha,
+                                sphereColour, colourAlpha,
                                 jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw,
                                 EntityType, jsonEntity.LastUpdate_UTC
                             );
@@ -100,7 +100,6 @@ function App() {
                     }
                     function AddModel() {
                         if (cesiumRef.current) {
-                            //drawModel = (_id, _lng, _lat, _altitude, _roll, _pitch, _yaw,)
                             cesiumRef.current.drawModel(jsonEntity.Id,
                                 jsonEntity.Position.Longitude, jsonEntity.Position.Latitude, jsonEntity.Position.Altitude,
                                 jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw-90
@@ -132,7 +131,6 @@ function App() {
                                 cesiumRef.current.DeleteTrack(message);
                                 break;
                             default:
-                            
                                 break;
                         }
                     }
@@ -149,9 +147,6 @@ function App() {
     return (
         <div>
             {/* <div className="navbar"></div> */}
-
-
-
             <div className="main-screen">
                 <Cesium3DWindow ref={cesiumRef} onUpdateStats={updateStats} />
                 <DashboardOverlay stats={stats} onUpdateStats={updateStats} />

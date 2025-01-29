@@ -6,7 +6,6 @@ import CheckBoxRow from '../components/CheckBoxRow.jsx';
 const TestUI = () => {
     return (
         <div>
-
             <div>
                 <h1>New Page</h1>
                 <p>Welcome to the new page!</p>

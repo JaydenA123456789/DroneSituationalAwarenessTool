@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using DroneSituationalAwarenessTool.Server.SignalRHubs;
 using SharedLibraries.EntityFunctionality;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using SharedLibraries.HelperObjects;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
 {
@@ -23,7 +20,6 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
         private static readonly ReaderWriterLockSlim _AirEntityLock = new ReaderWriterLockSlim();
         private static readonly ReaderWriterLockSlim _MaritimeEntityLock = new ReaderWriterLockSlim();
 
-
         private readonly IHubContext<ClientHub> _clientHubContext;
 
         public EntityState(IHubContext<ClientHub> clientHubContext)
@@ -37,11 +33,11 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
             AirEntityList = new List<AirEntity>();
             MaritimeEntityList = new List<MaritimeEntity>();
 
-            //Add dummy drone so that it will render air and maritime data with an active drone
+            //Add dummy drone so that it will render air and maritime data without an active drone
             new DroneEntity
             {
-                Id = "Drone1",
-                Position = new Position(
+                Id = "Drone_Demo_Dummy",
+                Position = new Position( //In Brisbane
                 -27.47,
                 153.0,
                 -100000.0
@@ -53,8 +49,7 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
                 TracePositions = new List<Position>()
             };
 
-            //create task to update time (hz)
-            CreateStaleRunner(0.5);
+            CreateStaleRunner(0.5);//create task to update time (hz)
         }
         public void AddUpdateEntity(Debug_GenericEntity newEntity)
         {
@@ -99,12 +94,14 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
                 AirEntityList.Add(newEntity);
                 SendEntityUpdateToClient(newEntity);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.ToString());
             }
             _AirEntityLock.ExitWriteLock();
             return;
         }
+
         public void AddUpdateEntity(MaritimeEntity newEntity)
         {
             _MaritimeEntityLock.EnterWriteLock();
@@ -150,7 +147,7 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
             return;
         }
 
-        private bool OutSideRenderDist(IMapEntity mapEntity, double deg_renderDist)
+        private bool OutSideRenderDist(IMapEntity mapEntity, double deg_maxRenderDist)
         {
             _DroneEntityLock.EnterWriteLock();
             foreach (DroneEntity drone in DroneEntityList)
@@ -161,15 +158,14 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
                     Math.Pow(mapEntity.Position.Latitude - drone.Position.Latitude, 2)
                 );
 
-                if (deg_pointDist < deg_renderDist)
+                if (deg_pointDist < deg_maxRenderDist)
                 {
-                    //Console.WriteLine("Within Render Distance: " + deg_pointDist);
                     _DroneEntityLock.ExitWriteLock();
-                    return false; // MapEntity is within render distance of at least one drone
+                    return false; // mapEntity is not outside render distance of at least one drone
                 }
             }
             _DroneEntityLock.ExitWriteLock();
-            return true; // MapEntity is outside render distance of all drones
+            return true; // mapEntity is outside render distance of all drones
         }
 
         private void SendTrackUpdateToClient(IMapEntity entity)
@@ -199,7 +195,6 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
         {
             try
             {
-                //Console.WriteLine("Sending message... " + JsonConvert.SerializeObject(entity));
                 _clientHubContext.Clients.All.SendAsync("UpdateAddToCesium", "Stale", JsonConvert.SerializeObject(entity));
             }
             catch (Exception ex)
@@ -256,15 +251,12 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
                         Console.WriteLine("Cannot remove this type");
                         break;
                 }
-
                 Console.WriteLine("Deleted");
             });
         }
 
-
         private void RemoveEntityAndTrack(IMapEntity entity)
         {
-
             try
             {
                 _clientHubContext.Clients.All.SendAsync("DeleteFromCesium", "EntityAndTrack", entity.Id);
@@ -273,7 +265,6 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
             {
                 Console.WriteLine($"Error sending message: {ex.Message}");
             }
-
         }
 
         private void CheckStale(IMapEntity entity) 
@@ -283,7 +274,6 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
 
             // Calculate the time difference
             TimeSpan timeDifference = currentUtcTime - lastReportedUtcTime;
-
             double int_timeDifference = timeDifference.TotalMilliseconds;
 
             //If x seconds no data then delete
@@ -300,8 +290,8 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
                     Console.WriteLine($"StackTrace: {ex.StackTrace}");
                 }
 
-            } //If x seconds no data then make stale
-            else if (timeDifference.TotalMilliseconds > 20000 ) 
+            } //If x seconds no data then make stale (grey spheres)
+            else if (timeDifference.TotalMilliseconds > 20000 )
             {
                 Stale_SendUpdateToClient(entity);
             }
@@ -317,7 +307,6 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
                     while (true)
                     {
                         await Task.Delay(delayRateMS);
-                        Console.WriteLine("Check Stale");
 
                         _AirEntityLock.EnterWriteLock();
                         foreach (IMapEntity entity in AirEntityList)
@@ -344,6 +333,7 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
                 Console.WriteLine("exception "+ ex);
                 try
                 {
+                    //Release locks if owned to make exception non-blocking
                     if(_AirEntityLock.IsWriteLockHeld) _AirEntityLock.ExitWriteLock();
                     if (_MaritimeEntityLock.IsWriteLockHeld) _MaritimeEntityLock.ExitWriteLock();
                     if (_DroneEntityLock.IsWriteLockHeld) _DroneEntityLock.ExitWriteLock();
@@ -351,10 +341,8 @@ namespace DroneSituationalAwarenessTool.Server.EntityStateFunctionality
                 catch (Exception ex2) {
                     Console.WriteLine("Backup runner fail: "+ex2);
                 }
-                //Temperary fix for 'Collection was modified; enumeration operation may not execute'
-                CreateStaleRunner(updateRateHz);
+                CreateStaleRunner(updateRateHz); //Restart stale checker
             }
-            Console.WriteLine("\n \n CHECK OVER \n\n");
         }
     }
 }

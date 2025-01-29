@@ -7,9 +7,7 @@ namespace DroneSituationalAwarenessTool.Server.SignalRHubs
     {
         public async Task UpdateAddToCesium(string user, string message)
         {
-            //Console.WriteLine($"1Received message from {user}: {message}");
-            // Broadcast to all connected clients
-            await Clients.All.SendAsync("UpdateAddToCesium", user, message);
+            await Clients.All.SendAsync("UpdateAddToCesium", user, message); //Could target a single instance or allow for multiple clients to see the same data
         }
     }
 }

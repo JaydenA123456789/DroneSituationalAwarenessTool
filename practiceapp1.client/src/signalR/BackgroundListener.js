@@ -3,13 +3,16 @@ import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 import * as Cesium from "cesium";
 
+/**
+ * Used for testing only, isnt mounted so shouldn't run
+ */
 const BackgroundListener = () => {
     const cesiumRef = useRef();
 
     useEffect(() => {
         // 1. Build the connection
         const connection = new HubConnectionBuilder()
-            .withUrl('https://localhost:7017/ClientHub') // Replace with your actual hub URL
+            .withUrl('https://localhost:7017/ClientHub')
             .configureLogging(LogLevel.Information)
             .withAutomaticReconnect()
             .build();
@@ -43,8 +46,7 @@ const BackgroundListener = () => {
         };
     }, []);
 
-    // No UI to render, so return null
-    return null;
+    return null;// No UI to render, so return null
 };
 
 export default BackgroundListener;

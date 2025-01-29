@@ -11,7 +11,6 @@ namespace DroneSituationalAwarenessTool.Server.SignalRHubs
     {
         private readonly EntityState _entityState;
 
-        // Custom constructor that takes EntityState
         public InterfaceHub(EntityState entityState)
         {
             _entityState = entityState;
@@ -19,8 +18,6 @@ namespace DroneSituationalAwarenessTool.Server.SignalRHubs
 
         public async Task SendMessage(string user, string message)
         {
-
-            //Console.WriteLine($"Received message from {user}: {message}");
             switch (user)
             {
                 case "AirData":
@@ -57,8 +54,6 @@ namespace DroneSituationalAwarenessTool.Server.SignalRHubs
                     Console.WriteLine("Unknown data type: " + user);
                     break;
             }
-
-
         }
     }
 }
