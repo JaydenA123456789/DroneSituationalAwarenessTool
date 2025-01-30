@@ -26,6 +26,7 @@ function App() {
         });
     };
 
+    var dronePacketNo = 0;
 
     const cesiumRef = useRef();
     useEffect(() => {
@@ -73,6 +74,9 @@ function App() {
                             EntityType = "Drone (MAVLink)";
                             //AddSphere(0.1)
                             AddModel();
+                            if (dronePacketNo++ % 20 === 0) { //only periodically update position
+                                AddBillboard();
+                            }
                             break
                         case "Stale":
                             console.log('Data Staled');
@@ -94,7 +98,7 @@ function App() {
                                 200,
                                 sphereColour, colourAlpha,
                                 jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw,
-                                EntityType, jsonEntity.LastUpdate_UTC
+                                EntityType, ConvertTimeToReadable(jsonEntity.LastUpdate_UTC)
                             );
                         }
                     }
@@ -102,9 +106,25 @@ function App() {
                         if (cesiumRef.current) {
                             cesiumRef.current.drawModel(jsonEntity.Id,
                                 jsonEntity.Position.Longitude, jsonEntity.Position.Latitude, jsonEntity.Position.Altitude,
-                                jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw-90
+                                jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw - 90,
+                                EntityType, ConvertTimeToReadable(jsonEntity.LastUpdate_UTC)
                             );
                         }
+                    }
+
+                    function AddBillboard() {
+                        if (cesiumRef.current) {
+                            cesiumRef.current.drawBillboard(jsonEntity.Id+"Billboard",
+                                jsonEntity.Position.Longitude, jsonEntity.Position.Latitude, jsonEntity.Position.Altitude+200,
+                                jsonEntity.Attitude.Roll, jsonEntity.Attitude.Pitch, jsonEntity.Attitude.Yaw - 90,
+                                EntityType, ConvertTimeToReadable(jsonEntity.LastUpdate_UTC)
+                            );
+                        }
+                    }
+
+                    function ConvertTimeToReadable(timeString) {
+                        const timeOnly = timeString.split("T")[1].split("+")[0].slice(0, 8);
+                        return timeOnly;
                     }
                 });
 

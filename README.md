@@ -21,7 +21,6 @@ Steps to running program:
     7. Begin the flight (vehicle dependent. Usually take off, arm then set to auto)
     8. Press CTRL+F to enter developer modern
     9. Press "MAVLink"
-    10. Open a TCP Host with Write checked (This step might not be necessary)
-    11. In the top row, add "TCP"(Type), "Outbound"(Direction), 4112(Port), 127.0.0.1(Host)
-    12. Press go. If the program is open you might need to refresh the browser to reopen the connection
+    10. In the top row, add "TCP"(Type), "Outbound"(Direction), 4112(Port), 127.0.0.1(Host)
+    11. Press go. If the program is open you might need to refresh the browser to reopen the connection
         -This step can be very finicky since the tool isnt officially released

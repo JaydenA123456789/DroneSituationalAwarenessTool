@@ -30,11 +30,11 @@
     justify-content: center;
 }
 
-
-
 /* Generic */
 .info-section {
-    width: 50%;
+    width: 95%;
+    padding-left:2.5%;
+    padding-right: 2.5%;
 }
 
 
@@ -48,14 +48,19 @@
 
 
 /* load-and-stats section*/
-#title {
-    font-size: 1.3em !important;
-}
-
 #stats-section {
     width: 100%;
     display: block;
 }
+
+#title {
+    font-size: 1.3em !important;
+}
+
+#stats-section-table {
+    font-size: 0.85em !important;
+}
+
 
 /*play - pause section*/
 .play-pause-section {
@@ -88,6 +93,6 @@
     vertical-align: middle;
 }
 
-.ui-container .control-panel #stats-section #UTC-time {
+#UTC-time {
     font-size: 1px !important;
 }
